@@ -3,7 +3,7 @@ pipeline {
   environment {
     PIPELINE_USER_CREDENTIAL_ID = 'aws-access'
     SAM_TEMPLATE = 'sam-app/template.yaml'
-    MAIN_BRANCH = 'main'
+    MAIN_BRANCH = 'master'
     TESTING_STACK_NAME = 'sam-app-dev'
     TESTING_PIPELINE_EXECUTION_ROLE = 'arn:aws:iam::577638377042:role/aws-sam-cli-managed-dev-pipel-PipelineExecutionRole-Xlm5roRrXylg'
     TESTING_CLOUDFORMATION_EXECUTION_ROLE = 'arn:aws:iam::577638377042:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionRo-wS7nB6eBinnu'
