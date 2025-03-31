@@ -11,7 +11,7 @@ pipeline {
     // If there are functions with "Image" PackageType in your template,
     // uncomment the line below and add "--image-repository ${TESTING_IMAGE_REPOSITORY}" to
     // testing "sam package" and "sam deploy" commands..
-    // TESTING_IMAGE_REPOSITORY = '0123456789.dkr.ecr.region.amazonaws.com/repository-name'
+    // TESTING_IMAGE_REPOSITORY = '0123456789.dkr.ecr.region.amazonaws.com/repository-name '
     TESTING_REGION = 'eu-north-1'
     PROD_STACK_NAME = 'sam-app-prod'
     PROD_PIPELINE_EXECUTION_ROLE = 'arn:aws:iam::577638377042:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-rmLOlYuAiO7N'
