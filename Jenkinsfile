@@ -81,7 +81,7 @@ pipeline {
         }
       }
       steps {
-        sh 'sam build --template ${SAM_TEMPLATE} --use-container'
+        sh 'sam build --template ${SAM_TEMPLATE}'
         withAWS(
             credentials: env.PIPELINE_USER_CREDENTIAL_ID,
             region: env.TESTING_REGION,
