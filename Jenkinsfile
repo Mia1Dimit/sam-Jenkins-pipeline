@@ -1,23 +1,22 @@
 pipeline {
   agent any
   environment {
-    AWS_SAM_CLI_HOME = '/sam-app/.aws-sam'
     PIPELINE_USER_CREDENTIAL_ID = 'aws-access'
     SAM_TEMPLATE = 'sam-app/template.yaml'
     MAIN_BRANCH = 'master'
     TESTING_STACK_NAME = 'sam-app-dev'
-    TESTING_PIPELINE_EXECUTION_ROLE = 'arn:aws:iam::577638377042:role/aws-sam-cli-managed-dev-pipel-PipelineExecutionRole-Xlm5roRrXylg'
-    TESTING_CLOUDFORMATION_EXECUTION_ROLE = 'arn:aws:iam::577638377042:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionRo-wS7nB6eBinnu'
-    TESTING_ARTIFACTS_BUCKET = 'aws-sam-cli-managed-dev-pipeline-r-artifactsbucket-xtcgyactv7vd'
+    TESTING_PIPELINE_EXECUTION_ROLE = 'arn:aws:iam::577638377042:role/aws-sam-cli-managed-dev-pipel-PipelineExecutionRole-n7tuplPTW5ke'
+    TESTING_CLOUDFORMATION_EXECUTION_ROLE = 'arn:aws:iam::577638377042:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionRo-Zq5H5VSDAsgX'
+    TESTING_ARTIFACTS_BUCKET = 'aws-sam-cli-managed-dev-pipeline-r-artifactsbucket-muwuwmfvjpk6'
     // If there are functions with "Image" PackageType in your template,
     // uncomment the line below and add "--image-repository ${TESTING_IMAGE_REPOSITORY}" to
-    // testing "sam package" and "sam deploy" commands..
-    // TESTING_IMAGE_REPOSITORY = '0123456789.dkr.ecr.region.amazonaws.com/repository-name '
+    // testing "sam package" and "sam deploy" commands.
+    // TESTING_IMAGE_REPOSITORY = '0123456789.dkr.ecr.region.amazonaws.com/repository-name'
     TESTING_REGION = 'eu-north-1'
     PROD_STACK_NAME = 'sam-app-prod'
-    PROD_PIPELINE_EXECUTION_ROLE = 'arn:aws:iam::577638377042:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-rmLOlYuAiO7N'
-    PROD_CLOUDFORMATION_EXECUTION_ROLE = 'arn:aws:iam::577638377042:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-WmJz760B2m6s'
-    PROD_ARTIFACTS_BUCKET = 'aws-sam-cli-managed-prod-pipeline--artifactsbucket-uio9mg5tsnnt'
+    PROD_PIPELINE_EXECUTION_ROLE = 'arn:aws:iam::577638377042:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-JsRHNz3Rq1Gc'
+    PROD_CLOUDFORMATION_EXECUTION_ROLE = 'arn:aws:iam::577638377042:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-OWTcfbj1T2I3'
+    PROD_ARTIFACTS_BUCKET = 'aws-sam-cli-managed-prod-pipeline--artifactsbucket-x3ovuur8szzu'
     // If there are functions with "Image" PackageType in your template,
     // uncomment the line below and add "--image-repository ${PROD_IMAGE_REPOSITORY}" to
     // prod "sam package" and "sam deploy" commands.
@@ -132,18 +131,6 @@ pipeline {
             role: env.TESTING_PIPELINE_EXECUTION_ROLE,
             roleSessionName: 'testing-deployment') {
           sh '''
-            # Create directory and set permissions
-            mkdir -p /sam-app/.aws-sam
-            chmod 777 /sam-app/.aws-sam
-            export SAM_CLI_TELEMETRY=0
-            export HOME=/sam-app
-            
-            # First, delete the stack if it's in a ROLLBACK_COMPLETE state
-            # aws cloudformation describe-stacks --stack-name ${TESTING_STACK_NAME} --region ${TESTING_REGION} || \
-            # aws cloudformation delete-stack --stack-name ${TESTING_STACK_NAME} --region ${TESTING_REGION} && \
-            # echo "Waiting for stack deletion..." && sleep 60
-            
-            # Deploy with explicit HOME directory
             sam deploy --stack-name ${TESTING_STACK_NAME} \
               --template packaged-testing.yaml \
               --capabilities CAPABILITY_IAM \
