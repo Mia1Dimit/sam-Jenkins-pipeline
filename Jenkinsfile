@@ -87,7 +87,7 @@ pipeline {
         }
       }
       steps {
-        sh 'sam build --template ${SAM_TEMPLATE}'
+        sh 'PYTHON_PATH=/usr/bin/python3.11 sam build --template ${SAM_TEMPLATE}'
         withAWS(
             credentials: env.PIPELINE_USER_CREDENTIAL_ID,
             region: env.TESTING_REGION,
