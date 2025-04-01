@@ -132,6 +132,18 @@ pipeline {
             role: env.TESTING_PIPELINE_EXECUTION_ROLE,
             roleSessionName: 'testing-deployment') {
           sh '''
+            # Create directory and set permissions
+            mkdir -p /sam-app/.aws-sam
+            chmod 777 /sam-app/.aws-sam
+            export SAM_CLI_TELEMETRY=0
+            export HOME=/sam-app
+            
+            # First, delete the stack if it's in a ROLLBACK_COMPLETE state
+            # aws cloudformation describe-stacks --stack-name ${TESTING_STACK_NAME} --region ${TESTING_REGION} || \
+            # aws cloudformation delete-stack --stack-name ${TESTING_STACK_NAME} --region ${TESTING_REGION} && \
+            # echo "Waiting for stack deletion..." && sleep 60
+            
+            # Deploy with explicit HOME directory
             sam deploy --stack-name ${TESTING_STACK_NAME} \
               --template packaged-testing.yaml \
               --capabilities CAPABILITY_IAM \
