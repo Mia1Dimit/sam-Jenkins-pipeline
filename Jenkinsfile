@@ -1,6 +1,7 @@
 pipeline {
   agent any
   environment {
+    AWS_SAM_CLI_HOME = '/sam-app/.aws-sam'
     PIPELINE_USER_CREDENTIAL_ID = 'aws-access'
     SAM_TEMPLATE = 'sam-app/template.yaml'
     MAIN_BRANCH = 'master'
