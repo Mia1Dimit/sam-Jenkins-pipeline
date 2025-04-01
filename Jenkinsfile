@@ -82,12 +82,12 @@ pipeline {
           // If you only use a single runtime, replace with a proper image from 
           // https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-image-repositories.html
           // And remove --use-container option in sam build command below
-          image 'public.ecr.aws/sam/build-provided'
+          image 'public.ecr.aws/sam/build-python3.11'
           args '--user 0:0 -v /var/run/docker.sock:/var/run/docker.sock'
         }
       }
       steps {
-        sh 'export PYTHON_BIN_PATH=$(which python3.11) && export LAMBDA_BUILDERS_PATH=$(which python3.11) && sam build --template ${SAM_TEMPLATE} --use-container'
+        sh 'sam build --template ${SAM_TEMPLATE}'
         withAWS(
             credentials: env.PIPELINE_USER_CREDENTIAL_ID,
             region: env.TESTING_REGION,
@@ -118,7 +118,7 @@ pipeline {
         archiveArtifacts artifacts: 'packaged-prod.yaml'
       }
     }
-
+    
     stage('deploy-testing') {
       when {
         branch env.MAIN_BRANCH
