@@ -67,6 +67,12 @@ pipeline {
       }
     }
 
+    stage('Verify Python Version') {
+      steps {
+          sh 'which python3 && python3 --version'
+      }
+    }
+
     stage('build-and-package') {
       when {
         branch env.MAIN_BRANCH
