@@ -87,7 +87,7 @@ pipeline {
         }
       }
       steps {
-        sh 'export PYTHON_BIN_PATH=$(which python3.11) && export LAMBDA_BUILDERS_PATH=$(which python3.11) && sam build --template ${SAM_TEMPLATE}'
+        sh 'export PYTHON_BIN_PATH=$(which python3.11) && export LAMBDA_BUILDERS_PATH=$(which python3.11) && sam build --template ${SAM_TEMPLATE} --use-container'
         withAWS(
             credentials: env.PIPELINE_USER_CREDENTIAL_ID,
             region: env.TESTING_REGION,
