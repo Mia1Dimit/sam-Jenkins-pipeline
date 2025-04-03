@@ -8,15 +8,16 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 10
+    MemorySize: 128  # Lowest setting to stay in free tier
+    Runtime: python3.11
 
 Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: hello_world/
+      CodeUri: functions/hello_world/
       Handler: app.lambda_handler
-      Runtime: python3.11
       Architectures:
         - x86_64
       Events:
@@ -26,16 +27,86 @@ Resources:
             Path: /hello
             Method: get
 
+  UppercaseFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/uppercase/
+      Handler: app.lambda_handler
+      Role: arn:aws:iam::577638377042:role/api-gateway-lambda-demo-UppercaseFunctionRole-U06eSuMNEjO6
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /uppercase
+            Method: post
+
+  CalculatorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/calculator/
+      Handler: app.lambda_handler
+      Role: arn:aws:iam::577638377042:role/api-gateway-lambda-demo-CalculatorFunctionRole-ksto7g87mIoc
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /calculator
+            Method: post
+
+  AdvancedCalculatorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/advanced-calculator/
+      Handler: app.lambda_handler
+      Role: arn:aws:iam::577638377042:role/api-gateway-lambda-demo-AdvancedCalculatorFunctionR-XTVB84EPeLCp
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /advanced-calculator
+            Method: post
+
+  StringOpsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/string-ops/
+      Handler: app.lambda_handler
+      Role: arn:aws:iam::577638377042:role/api-gateway-lambda-demo-StringOpsFunctionRole-qDp7NDJoxQHv
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /string-ops
+            Method: get
+
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+  ApiGatewayBaseUrl:
+    Description: "Base URL for the API Gateway"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+
   HelloWorldFunction:
     Description: "Hello World Lambda Function ARN"
     Value: !GetAtt HelloWorldFunction.Arn
+
   HelloWorldFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt HelloWorldFunctionRole.Arn
+
+  UppercaseFunction:
+    Description: "Uppercase Lambda Function ARN"
+    Value: !GetAtt UppercaseFunction.Arn
+
+  CalculatorFunction:
+    Description: "Calculator Lambda Function ARN"
+    Value: !GetAtt CalculatorFunction.Arn
+
+  AdvancedCalculatorFunction:
+    Description: "Advanced Calculator Lambda Function ARN"
+    Value: !GetAtt AdvancedCalculatorFunction.Arn
+
+  StringOpsFunction:
+    Description: "String Ops Lambda Function ARN"
+    Value: !GetAtt StringOpsFunction.Arn
